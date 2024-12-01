@@ -1,0 +1,19 @@
+.sidebar {
+    width: 200px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #41D78C !important;
+}
+
+/* Estilo para ajustar el tamaño de la fuente en la tabla de Tabulator */
+.tabulator .tabulator-cell {
+    font-size: 12px;
+    /* Ajusta este valor según tus necesidades */
+}
+
+.tabulator .tabulator-header .tabulator-col {
+    font-size: 12px;
+    /* Ajusta este valor según tus necesidades */
+}

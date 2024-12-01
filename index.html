@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/bootstrap.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator_bootstrap5.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/components.css">
+
+    <title>Facturación Electrónica</title>
+</head>
+
+<body>
+
+    <div class="d-flex">
+        <!-- Barra lateral -->
+        <div class="gradient-2-80 text-white vh-100 shadow d-flex flex-column sidebar">
+            <!-- Logotipo -->
+            <div class="p-3 text-center text-light">
+                <img src="./assets/img/logo.svg" class="img-fluid w-75" alt="">
+            </div>
+            <!-- Menú -->
+            <nav class="nav flex-column mt-4">
+                <a href="#" class="nav-link d-flex align-items-center text-light fs-5 py-3 px-3">
+                    <i class="bi bi-file-earmark-text me-2"></i>
+                    <span>Facturación</span>
+                </a>
+                <a href="#" class="nav-link d-flex align-items-center text-light fs-5 py-3 px-3">
+                    <i class="bi bi-people me-2"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a href="#" class="nav-link d-flex align-items-center text-light active fs-5 py-3 px-3">
+                    <i class="bi bi-box-seam me-2"></i>
+                    <span>Productos</span>
+                </a>
+                <a href="#" class="nav-link d-flex align-items-center text-light fs-5 py-3 px-3">
+                    <i class="bi bi-gear me-2"></i>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+            <!-- Footer -->
+            <div class="mt-auto p-3 text-center text-light">
+                © 2024 Facturación Electrónica
+            </div>
+        </div>
+
+        <div class="flex-grow-1">
+            <!-- Navbar Minimalista -->
+            <nav class="navbar navbar-expand-lg bg-light border-bottom px-3">
+                <div class="container-fluid d-flex justify-content-end align-items-center">
+                    <!-- Opciones de Usuario -->
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-decoration-none text-dark dropdown-toggle"
+                            id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-4 me-2"></i>
+                            <span class="fw-semibold">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userMenu">
+                            <li><a class="dropdown-item" href="#">Perfil</a></li>
+                            <li><a class="dropdown-item text-danger" href="#">Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Contenido -->
+            <div class="p-4">
+                <div class="row">
+                    <div class="col-12 gradient-1-45 shadow p-3 rounded-5 d-flex justify-content-end align-content-center text-light fw-bold">
+                        <h1>Gestion De Productos</h1>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-secondary text-light my-3" data-bs-toggle="modal" data-bs-target="#mi-modal">Crear
+                            Nuevo
+                            Item</button>
+                    </div>
+
+                    <div class="col-12">
+                        <div id="table-container"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="mi-modal" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Crear Nuevo Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md">
+                                <label for="itemName" class="form-label">Nombre del Producto</label>
+                                <input type="text" class="form-control" id="itemName"
+                                    placeholder="Ingresa el nombre del producto" required>
+                            </div>
+                            <div class="col-md">
+                                <label for="itemCode" class="form-label">Código</label>
+                                <input type="text" class="form-control" id="itemCode"
+                                    placeholder="Ingresa el código del producto" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md">
+                                <label for="unitPrice" class="form-label">Precio Unitario</label>
+                                <input type="text" class="form-control" id="unitPrice"
+                                    placeholder="Ingresa el precio unitario" required>
+                            </div>
+                            <div class="col-md">
+                                <label for="productStatus" class="form-label">Tipo de Item</label>
+                                <select class="form-select" id="productStatus" required>
+                                    <option value="" disabled selected>Selecciona el Tipo de Item</option>
+                                    <option value="product">Producto</option>
+                                    <option value="service">Servicio</option>
+                                    <option value="combo">Combo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md">
+                                <label for="totalTaxes" class="form-label">Total Impuestos</label>
+                                <input type="text" class="form-control" id="totalTaxes"
+                                    placeholder="Ingresa el total de impuestos" required>
+                            </div>
+                            <div class="col-md">
+                                <label for="salePrice" class="form-label">Precio de Venta</label>
+                                <input type="text" class="form-control" id="salePrice"
+                                    placeholder="Ingresa el precio de venta" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="itemDescription" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="itemDescription" rows="3"
+                                placeholder="Ingresa la descripción del producto"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para mostrar impuestos -->
+    <div class="modal fade" id="taxesModal" tabindex="-1" aria-labelledby="taxesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header gradient-2-45">
+                    <h5 class="modal-title text-light" id="taxesModalLabel">Impuestos del Ítem</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Contenedor para la tabla de impuestos -->
+                    <div id="taxesTableContainer"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <script src="./assets/js/index.js"></script>
+
+
+</body>
+
+</html>
