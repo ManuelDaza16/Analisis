@@ -5,8 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/bootstrap.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator_bootstrap5.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.14.5/sweetalert2.css"
+        integrity="sha512-6qScZESleBziOBqJwOPurSy6lhLqHGjHNALOOFX0mzRVPiE5SZQvepRzeSO1OB475fcZywuMjxtkrFaO93aq9g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/virtual-select-plugin@1.0.46/dist/virtual-select.min.css">
     <link rel="stylesheet" href="./assets/css/components.css">
 
     <title>Facturación Electrónica</title>
@@ -14,68 +18,78 @@
 
 <body>
 
-    <div class="d-flex">
-        <!-- Barra lateral -->
-        <div class="gradient-2-80 text-white vh-100 shadow d-flex flex-column sidebar">
-            <!-- Logotipo -->
-            <div class="p-3 text-center text-light">
-                <img src="./assets/img/logo.svg" class="img-fluid w-75" alt="">
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar gradient-2-45">
+            <div class="text-center p-2">
+                <!-- Logo -->
+                <i class='bx bxs-cube-alt bx-lg text-primary'></i>
             </div>
-            <!-- Menú -->
-            <nav class="nav flex-column mt-4">
-                <a href="#" class="nav-link d-flex align-items-center text-light fs-5 py-3 px-3">
-                    <i class="bi bi-file-earmark-text me-2"></i>
-                    <span>Facturación</span>
-                </a>
-                <a href="#" class="nav-link d-flex align-items-center text-light fs-5 py-3 px-3">
-                    <i class="bi bi-people me-2"></i>
-                    <span>Usuarios</span>
-                </a>
-                <a href="#" class="nav-link d-flex align-items-center text-light active fs-5 py-3 px-3">
-                    <i class="bi bi-box-seam me-2"></i>
-                    <span>Productos</span>
-                </a>
-                <a href="#" class="nav-link d-flex align-items-center text-light fs-5 py-3 px-3">
-                    <i class="bi bi-gear me-2"></i>
-                    <span>Configuración</span>
-                </a>
-            </nav>
-            <!-- Footer -->
-            <div class="mt-auto p-3 text-center text-light">
-                © 2024 Facturación Electrónica
-            </div>
+            <ul class="sidebar-nav mt-1">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class='bx bx bx-receipt'></i>
+                        <span>Facturación</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class='bx bxs-user'></i>
+                        <span>Usuarios</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link active">
+                        <i class='bx bxs-package'></i>
+                        <span>Productos</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class='bx bx-cog'></i>
+                        <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
         </div>
 
-        <div class="flex-grow-1">
-            <!-- Navbar Minimalista -->
-            <nav class="navbar navbar-expand-lg bg-light border-bottom px-3">
-                <div class="container-fluid d-flex justify-content-end align-items-center">
-                    <!-- Opciones de Usuario -->
-                    <div class="dropdown">
-                        <a href="#" class="d-flex align-items-center text-decoration-none text-dark dropdown-toggle"
-                            id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle fs-4 me-2"></i>
-                            <span class="fw-semibold">Admin</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userMenu">
-                            <li><a class="dropdown-item" href="#">Perfil</a></li>
-                            <li><a class="dropdown-item text-danger" href="#">Cerrar sesión</a></li>
-                        </ul>
+        <!-- Main content -->
+        <div class="main">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow p-0">
+                <div class="container-fluid">
+                    <!-- Sidebar Toggle Button -->
+                    <div class="toggle-btn" type="button">
+                        <i class='bx bx-menu fs-1'></i>
+                    </div>
+                    <div class="collapse navbar-collapse justify-content-end">
+                        <!-- Dropdown de Administrador -->
+                        <div class="dropdown">
+                            <a class="btn dropdown-toggle d-flex align-items-center" href="#" role="button"
+                                id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="me-2">Administrador</span>
+                                <i class='bx bxs-user-circle fs-1'></i></a>
+
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </nav>
 
-            <!-- Contenido -->
-            <div class="p-4">
+            <div class="container-fluid p-4">
                 <div class="row">
-                    <div class="col-12 gradient-1-45 shadow p-3 rounded-5 d-flex justify-content-end align-content-center text-light fw-bold">
+                    <div
+                        class="col-12 gradient-2-45 shadow py-2 px-4 rounded-5 d-flex justify-content-end align-content-center text-light fw-bold">
                         <h1>Gestion De Productos</h1>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-12">
-                        <button class="btn btn-secondary text-light my-3" data-bs-toggle="modal" data-bs-target="#mi-modal">Crear
+                        <button class="btn btn-outline-dark my-3" data-bs-toggle="modal"
+                            data-bs-target="#addItems">Crear
                             Nuevo
                             Item</button>
                     </div>
@@ -84,14 +98,13 @@
                         <div id="table-container"></div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
 
-    <div class="modal fade" id="mi-modal" data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade" id="addItems" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel">Crear Nuevo Item</h5>
@@ -100,15 +113,26 @@
                 <div class="modal-body">
                     <form>
                         <div class="row mb-3">
-                            <div class="col-md">
-                                <label for="itemName" class="form-label">Nombre del Producto</label>
-                                <input type="text" class="form-control" id="itemName"
+                            <div class="col-md-5">
+                                <label for="name" class="form-label">Nombre del Producto</label>
+                                <input type="text" class="form-control" id="name"
                                     placeholder="Ingresa el nombre del producto" required>
                             </div>
-                            <div class="col-md">
+                            <div class="col-md-5">
                                 <label for="itemCode" class="form-label">Código</label>
                                 <input type="text" class="form-control" id="itemCode"
                                     placeholder="Ingresa el código del producto" required>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="row p-0">
+                                    <div class="col-12"> <label for="status" class="form-label">Estado</label></div>
+                                    <div class="col-12 d-flex justify-content-start align-content-center">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="status">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -118,15 +142,30 @@
                                     placeholder="Ingresa el precio unitario" required>
                             </div>
                             <div class="col-md">
-                                <label for="productStatus" class="form-label">Tipo de Item</label>
-                                <select class="form-select" id="productStatus" required>
-                                    <option value="" disabled selected>Selecciona el Tipo de Item</option>
-                                    <option value="product">Producto</option>
-                                    <option value="service">Servicio</option>
-                                    <option value="combo">Combo</option>
-                                </select>
+                                <label for="typeItem" class="form-label">Tipo de Item</label>
+                                <div id="typeItem"></div>
                             </div>
                         </div>
+
+                        <div class="row mb-3">
+                            <label for="" class="form-label">Agregar Impuestos</label>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo Impuesto</th>
+                                        <th>Tasa Impuesto (%)</th>
+                                        <th>Valor Nominal</th>
+                                        <th>Unidad de Medida</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="taxesTableBody">
+                                    <!-- Filas dinámicas -->
+                                </tbody>
+                            </table>
+                            <button id="addRow" class="btn btn-outline-primary px-5">Agregar Línea +</button>
+                        </div>
+
                         <div class="row mb-3">
                             <div class="col-md">
                                 <label for="totalTaxes" class="form-label">Total Impuestos</label>
@@ -134,8 +173,8 @@
                                     placeholder="Ingresa el total de impuestos" required>
                             </div>
                             <div class="col-md">
-                                <label for="salePrice" class="form-label">Precio de Venta</label>
-                                <input type="text" class="form-control" id="salePrice"
+                                <label for="salesPrice" class="form-label">Precio de Venta</label>
+                                <input type="text" class="form-control" id="salesPrice"
                                     placeholder="Ingresa el precio de venta" required>
                             </div>
                         </div>
@@ -156,7 +195,7 @@
 
     <!-- Modal para mostrar impuestos -->
     <div class="modal fade" id="taxesModal" tabindex="-1" aria-labelledby="taxesModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header gradient-2-45">
                     <h5 class="modal-title text-light" id="taxesModalLabel">Impuestos del Ítem</h5>
@@ -166,7 +205,24 @@
                     <div id="taxesTableContainer"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="combosModal" tabindex="-1" aria-labelledby="combosModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header gradient-2-45">
+                    <h5 class="modal-title text-light" id="combosModalLabel">Ítems del Combo</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Contenedor para la tabla de combos -->
+                    <div id="combosTableContainer"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -177,8 +233,12 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.14.5/sweetalert2.all.js"
+        integrity="sha512-AbjPD2rIZFzBugvnJKl8IZmGWWmjmZrYysHZaryYg0+XkoqDpmuKKRxDfVPCaHzf1SB3cwSKkgeEd7xLOmBusQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/virtual-select-plugin@1.0.46/dist/virtual-select.min.js"></script>
+    <script src="./assets/js/menu.js"></script>
     <script src="./assets/js/index.js"></script>
-
 
 </body>
 

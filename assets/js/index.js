@@ -5,7 +5,112 @@ let itemsGlobal = [];
 let taxesData = [];
 let taxesTable = null; // Variable para almacenar la instancia de Tabulator
 
-// Función para abrir el modal y mostrar los impuestos
+let combosData = []; // Variable para almacenar los datos de combos
+let combosTable = null; // Variable para la instancia de Tabulator
+
+const toggleSwitch = document.getElementById('status')
+
+const taxesTableBody = document.getElementById("taxesTableBody");
+
+VirtualSelect.init({
+    ele: '#typeItem',
+    maxWidth: "100%",
+    options: [
+        { label: 'Producto', value: 'producto' },
+        { label: 'Servicios', value: 'servicios' },
+        { label: 'Combo', value: 'combo' },
+    ],
+});
+
+toggleSwitch.addEventListener("change", () => {
+    if (toggleSwitch.checked) {
+        console.log(true);
+    } else {
+        console.log(false);
+    }
+})
+
+// Opciones para los selects
+const taxTypeOptions = [
+    { label: "01 - IVA", value: "01 - IVA" },
+    { label: "02 - IC", value: "02 - IC" },
+    { label: "03 - RETE FUENTE", value: "03 - RETE FUENTE" },
+    { label: "04 - INC Bolsas", value: "04 - INC Bolsas" },
+    { label: "05 - INC Combustibles", value: "05 - INC Combustibles" }
+];
+
+const measureUnitOptions = [
+    { label: "NIU-número de", value: "NIU-número de" },
+    { label: "KG-kilogramos", value: "KG-kilogramos" },
+    { label: "LT-litros", value: "LT-litros" },
+    { label: "M-metros", value: "M-metros" }
+];
+
+// Función para agregar una nueva fila
+const addRow = () => {
+    const row = document.createElement("tr");
+
+    // Columna Tipo Impuesto
+    const taxTypeCell = document.createElement("td");
+    const taxTypeSelect = document.createElement("div");
+    VirtualSelect.init({
+        ele: taxTypeSelect,
+        options: taxTypeOptions,
+        search: true,
+        placeholder: "Seleccione..."
+    });
+    taxTypeCell.appendChild(taxTypeSelect);
+
+    // Columna Tasa Impuesto
+    const taxRateCell = document.createElement("td");
+    const taxRateInput = document.createElement("input");
+    taxRateInput.type = "number";
+    taxRateInput.className = "form-control";
+    taxRateCell.appendChild(taxRateInput);
+
+    // Columna Valor Nominal
+    const nominalValueCell = document.createElement("td");
+    const nominalValueInput = document.createElement("input");
+    nominalValueInput.type = "number";
+    nominalValueInput.className = "form-control";
+    nominalValueCell.appendChild(nominalValueInput);
+
+    // Columna Unidad de Medida
+    const measureUnitCell = document.createElement("td");
+    const measureUnitSelect = document.createElement("div");
+    VirtualSelect.init({
+        ele: measureUnitSelect,
+        options: measureUnitOptions,
+        search: true,
+        placeholder: "Seleccione..."
+    });
+    measureUnitCell.appendChild(measureUnitSelect);
+
+    // Columna Acciones
+    const actionsCell = document.createElement("td");
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "btn btn-danger btn-sm";
+    deleteButton.innerText = "Eliminar";
+    deleteButton.onclick = () => row.remove();
+    actionsCell.appendChild(deleteButton);
+
+    // Agregar celdas a la fila
+    row.appendChild(taxTypeCell);
+    row.appendChild(taxRateCell);
+    row.appendChild(nominalValueCell);
+    row.appendChild(measureUnitCell);
+    row.appendChild(actionsCell);
+
+    // Agregar fila a la tabla
+    taxesTableBody.appendChild(row);
+};
+
+// Agregar evento al botón
+document.getElementById("addRow").addEventListener("click", addRow);
+
+// Agregar una fila inicial
+addRow();
+
 function showTaxesModal(itemId) {
     // Llamada AJAX para obtener los impuestos
     $.ajax({
@@ -16,14 +121,89 @@ function showTaxesModal(itemId) {
             if (response.success) {
                 taxesData = response.data; // Guarda los datos de impuestos
                 buildTaxesTable(); // Construye la tabla de impuestos
-                const taxesModal = new bootstrap.Modal(document.getElementById('taxesModal'));
-                taxesModal.show(); // Muestra el modal
+
+                // Configura un temporizador para cerrar SweetAlert después de 2 segundos
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Datos cargados!",
+                    text: "Los impuestos se cargaron correctamente.",
+                    timer: 2000, // 2 segundos
+                    showConfirmButton: false,
+                }).then(() => {
+                    // Muestra el modal de impuestos después de que se cierre SweetAlert
+                    const taxesModal = new bootstrap.Modal(document.getElementById('taxesModal'));
+                    taxesModal.show();
+                });
             } else {
-                console.error("Error en la respuesta:", response.message);
+                // Cierra el SweetAlert y muestra un error
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: response.message || "Hubo un problema al cargar los impuestos.",
+                    timer: 2000, // 2 segundos
+                    showConfirmButton: false,
+                });
             }
         },
         error: (xhr, status, error) => {
+            // Muestra un mensaje de error con SweetAlert
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `No se pudieron cargar los impuestos para el ítem ID ${itemId}. Por favor, intenta nuevamente.`,
+                timer: 2000, // 2 segundos
+                showConfirmButton: false,
+            });
             console.error(`Error al obtener impuestos para el ítem ID ${itemId}:`, error);
+        },
+    });
+}
+
+// Función para mostrar el modal de combos
+function showCombosModal(itemId) {
+    // Llamada AJAX para obtener los combos
+    $.ajax({
+        url: `http://3.17.151.214/item/combos/${itemId}`, // URL corregida
+        method: "GET",
+        dataType: "json",
+        success: (response) => {
+            if (response.success) {
+                combosData = response.data; // Guarda los datos de combos
+                buildCombosTable(); // Construye la tabla de combos
+
+                // Configura un temporizador para cerrar SweetAlert después de 2 segundos
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Datos cargados!",
+                    text: "Los impuestos se cargaron correctamente.",
+                    timer: 2000, // 2 segundos
+                    showConfirmButton: false,
+                }).then(() => {
+                    // Muestra el modal de impuestos después de que se cierre SweetAlert
+                    const combosModal = new bootstrap.Modal(document.getElementById('combosModal'));
+                    combosModal.show();
+                });
+            } else {
+                // Cierra el SweetAlert y muestra un error
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: response.message || "Hubo un problema al cargar los combos.",
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+            }
+        },
+        error: (xhr, status, error) => {
+            // Cierra el SweetAlert y muestra un error
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `No se pudieron cargar los combos para el ítem ID ${itemId}. Por favor, intenta nuevamente.`,
+                timer: 2000,
+                showConfirmButton: false,
+            });
+            console.error(`Error al obtener combos para el ítem ID ${itemId}:`, error);
         },
     });
 }
@@ -46,6 +226,29 @@ function buildTaxesTable() {
             { title: "Valor", field: "value", formatter: "money", formatterParams: { precision: 2 }, headerFilter: true },
             { title: "Tipo", field: "typeTaxe", headerFilter: true },
             { title: "Unidad de Medida", field: "measureUnit", headerFilter: true, visible: true }, // Opcional
+        ],
+    });
+}
+
+function buildCombosTable() {
+    const combosTableContainer = document.getElementById("combosTableContainer");
+
+    // Limpia el contenedor antes de construir la tabla
+    combosTableContainer.innerHTML = "";
+
+    // Crear instancia de Tabulator si no existe, reutilizar si ya está creada
+    combosTable = new Tabulator(combosTableContainer, {
+        data: combosData, // Usa los datos de combos
+        layout: "fitColumns",
+        responsiveLayout: "collapse",
+        columns: [
+            { title: "ID", field: "id", width: 70 },
+            { title: "Código", field: "code", headerFilter: true },
+            { title: "Nombre", field: "name", headerFilter: true },
+            { title: "Descripción", field: "description" },
+            { title: "Precio Unitario", field: "unitPrice", formatter: "money", formatterParams: { precision: 2 }, headerFilter: true },
+            { title: "Total Impuestos", field: "totalTaxes", formatter: "money", formatterParams: { precision: 2 } },
+            { title: "Precio Venta", field: "salesPrice", formatter: "money", formatterParams: { precision: 2 } },
         ],
     });
 }
@@ -74,72 +277,156 @@ function buildTable() {
     const tableContainer = document.getElementById("table-container");
 
     const table = new Tabulator(tableContainer, {
-        data: itemsGlobal, // Usa los datos globales cargados
+        data: itemsGlobal,
         layout: "fitColumns",
-        responsiveLayout: "collapse", // Habilita diseño responsivo
-        movableColumns: true, // Permite mover columnas
-        tooltips: true, // Habilita tooltips para las celdas
-        tableClass: "table table-striped table-bordered table-hover", // Aplica clases de Bootstrap
+        responsiveLayout: "collapse",
+        tableClass: "table table-striped table-bordered table-hover",
+        pagination: "local",
+        paginationSize: 10,
+        locale: true,
+        langs: {
+            "es-419": { // Cambia "es-es" por "es-419"
+                "columns": {
+                    "name": "Nombre", // Traducción de columnas (si es dinámico)
+                },
+                "pagination": {
+                    "first": "Primera",
+                    "first_title": "Primera página",
+                    "last": "Última",
+                    "last_title": "Última página",
+                    "prev": "Anterior",
+                    "prev_title": "Página anterior",
+                    "next": "Siguiente",
+                    "next_title": "Página siguiente",
+                    "page_size": "Tamaño de página",
+                },
+                "groups": {
+                    "item": "ítem",
+                    "items": "ítems",
+                },
+                "data": {
+                    "loading": "Cargando datos...",
+                    "error": "Error al cargar datos.",
+                },
+                "paginationCounter": {
+                    "showing": "Mostrando",
+                    "of": "de",
+                    "pages": "páginas",
+                },
+            },
+        },
+        initialLocale: "es-419",
+        paginationSizeSelector: [10, 20, 50, 100],
         columns: [
-            { title: "#", field: "id", width: 70, hozAlign: "center", headerSort: false },
-            { title: "Código", field: "code", headerFilter: true, minWidth: 100 },
-            { title: "Tipo", field: "typeItem", headerFilter: true, minWidth: 120 },
-            { title: "Nombre", field: "name", headerFilter: true, minWidth: 150 },
-            { title: "Precio Unitario", field: "unitPrice", formatter: "money", formatterParams: { symbol: "$", precision: 2 }, minWidth: 120 },
-            { title: "Precio Venta", field: "salesPrice", formatter: "money", formatterParams: { symbol: "$", precision: 2 }, minWidth: 120 },
-            { title: "Estado", field: "status", formatter: "tickCross", sorter: "boolean", hozAlign: "center", width: 100 },
+            { title: "#", field: "id", width: 80, hozAlign: "center", headerSort: false, headerFilter: true },
+            { title: "Código", field: "code", headerFilter: true, widthGrow: 1 },
+            { title: "Tipo", field: "typeItem", headerFilter: true, widthGrow: 1 },
+            { title: "Nombre", field: "name", headerFilter: true, widthGrow: 2 },
+            { title: "Descripción", field: "description", headerFilter: true, widthGrow: 2 },
+            { title: "Precio Unitario", field: "unitPrice", formatter: "money", formatterParams: { symbol: "$", precision: 2 }, widthGrow: 1 },
+            { title: "Precio Venta", field: "salesPrice", formatter: "money", formatterParams: { symbol: "$", precision: 2 }, widthGrow: 1 },
+            { title: "Total Impuestos", field: "totalTaxes", formatter: "money", formatterParams: { symbol: "$", precision: 2 }, widthGrow: 1 },
+            { title: "Estado", field: "status", formatter: "tickCross", sorter: "boolean", hozAlign: "center", widthGrow: 0.99 },
             {
                 title: "Ver Impuestos",
-                formatter: () => "<button class='btn btn-info btn-sm'>Ver</button>",
-                width: 150,
+                formatter: () => "<button class='btn btn-dark btn-sm'><i class='bx bx-show me-2'></i> Ver</button>",
                 hozAlign: "center",
+                widthGrow: 1,
                 cellClick: (e, cell) => {
-                    const itemId = cell.getRow().getData().id; // Captura el ID del ítem
-                    showTaxesModal(itemId); // Llama a la función para abrir el modal
+                    const itemId = cell.getRow().getData().id;
+                    showTaxesModal(itemId);
                 },
             },
             {
                 title: "Ítems de Combo",
-                formatter: () => "<button class='btn btn-secondary btn-sm'>Ver</button>",
-                width: 150,
+                formatter: (cell) => {
+                    const rowData = cell.getRow().getData();
+                    // Mostrar el botón solo si el tipo es "combo"
+                    return rowData.typeItem === "combo" ? "<button class='btn btn-primary btn-sm'><i class='bx bx-show me-2'></i> Ver</button>" : "";
+                },
                 hozAlign: "center",
                 cellClick: (e, cell) => {
-                    const itemId = cell.getRow().getData().id;
-
-                    // Llamada AJAX para obtener los ítems del combo
-                    $.ajax({
-                        url: `http://3.17.151.214/items/${itemId}/combo`,
-                        method: "GET",
-                        dataType: "json",
-                        success: (response) => {
-                            console.log(`Ítems del combo para el ID ${itemId}:`, response.data);
-                        },
-                        error: (xhr, status, error) => {
-                            console.error(`Error al obtener ítems del combo para ID ${itemId}:`, error);
-                        },
-                    });
+                    const rowData = cell.getRow().getData();
+                    if (rowData.typeItem === "combo") {
+                        const itemId = rowData.id;
+                        showCombosModal(itemId); // Llama a la función para mostrar el modal de combos
+                    }
                 },
             },
             {
                 title: "Acciones",
                 formatter: () => `
-                    <button class='btn btn-warning btn-sm me-1'>Editar</button>
-                    <button class='btn btn-danger btn-sm'>Eliminar</button>
+                    <button class='btn btn-warning btn-sm me-1'><i class='bx bx-edit-alt fs-4'></i></button>
+                    <button class='btn btn-danger btn-sm delete-btn'><i class='bx bxs-trash-alt'></i></button>
                 `,
-                width: 200,
+                width: 100,
                 hozAlign: "center",
                 cellClick: (e, cell) => {
-                    const action = e.target.innerText.trim();
-                    const rowData = cell.getRow().getData();
-
-                    if (action === "Editar") {
-                        console.log("Editar ítem:", rowData);
-                    } else if (action === "Eliminar") {
-                        console.log("Eliminar ítem:", rowData);
+                    const target = e.target.closest('.delete-btn'); // Asegúrate de que sea el botón de eliminación
+                    if (target) {
+                        const itemId = cell.getRow().getData().id;
+                        deleteItem(itemId, cell.getRow()); // Llama a la función de eliminación
                     }
                 },
-            },
+            }
         ],
+    });
+}
+
+function deleteItem(itemId, row) {
+    // Muestra una confirmación antes de eliminar
+    Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción eliminará el ítem permanentemente.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#F54E41",
+        cancelButtonColor: "#111430",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Realiza la solicitud AJAX
+            $.ajax({
+                url: `http://3.17.151.214/items/${itemId}`, // URL para eliminar
+                method: "DELETE",
+                success: (response) => {
+                    if (response.success) {
+                        // Elimina la fila de la tabla
+                        row.delete();
+
+                        // Muestra un mensaje de éxito
+                        Swal.fire({
+                            title: "¡Eliminado!",
+                            text: "El ítem se eliminó correctamente.",
+                            icon: "success",
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
+                    } else {
+                        // Maneja errores del servidor
+                        Swal.fire({
+                            title: "Error",
+                            text: response.message || "No se pudo eliminar el ítem.",
+                            icon: "error",
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
+                    }
+                },
+                error: (xhr, status, error) => {
+                    // Maneja errores de la solicitud
+                    Swal.fire({
+                        title: "Error",
+                        text: `No se pudo eliminar el ítem. Error: ${error}`,
+                        icon: "error",
+                        timer: 2000,
+                        showConfirmButton: false,
+                    });
+                    console.error(`Error al eliminar el ítem ID ${itemId}:`, error);
+                },
+            });
+        }
     });
 }
 
@@ -149,7 +436,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // Evento para limpiar la tabla al cerrar el modal
     document.getElementById("taxesModal").addEventListener("hidden.bs.modal", () => {
         if (taxesTable) {
-            taxesTable.clearData(); // Limpia los datos de la tabla
+            taxesTable.clearData();
         }
     });
+
+    // Evento para limpiar la tabla al cerrar el modal
+    document.getElementById("combosModal").addEventListener("hidden.bs.modal", () => {
+        if (combosTable) {
+            combosTable.clearData();
+        }
+    });
+
 })
