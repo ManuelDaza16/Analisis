@@ -104,7 +104,7 @@
 
 
     <div class="modal fade" id="addItems" data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel">Crear Nuevo Item</h5>
@@ -144,6 +144,29 @@
                             <div class="col-md">
                                 <label for="typeItem" class="form-label">Tipo de Item</label>
                                 <div id="typeItem"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <table class="table table-bordered" id="combosTableAdd" style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Tipo</th>
+                                            <th>Precio Unitario</th>
+                                            <th>Precio Venta</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="combosTableBody">
+                                        <!-- Fila inicial generada dinámicamente -->
+                                    </tbody>
+                                </table>
+                                <button class="btn btn-primary" type="button" onclick="addRowToCombosTable()">Agregar
+                                    Fila</button>
+
                             </div>
                         </div>
 
@@ -195,7 +218,7 @@
 
     <!-- Modal para mostrar impuestos -->
     <div class="modal fade" id="taxesModal" tabindex="-1" aria-labelledby="taxesModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header gradient-2-45">
                     <h5 class="modal-title text-light" id="taxesModalLabel">Impuestos del Ítem</h5>
