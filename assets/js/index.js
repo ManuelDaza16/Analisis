@@ -554,3 +554,72 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 })
+
+document.addEventListener("DOMContentLoaded", () => {
+    const saveButton = document.querySelector("#btnsave");
+    const nameInput = document.getElementById("name");
+    const itemCodeInput = document.getElementById("itemCode");
+    const unitPriceInput = document.getElementById("unitPrice");
+    const typeItemInput = document.getElementById("typeItem");
+    const totalTaxesInput = document.getElementById("totalTaxes");
+    const salesPriceInput = document.getElementById("salesPrice");
+    const descriptionInput = document.getElementById("itemDescription");
+
+    // Función para validar campos
+    const validateFields = () => {
+        const name = nameInput.value.trim();
+        const itemCode = itemCodeInput.value.trim();
+        const unitPrice = unitPriceInput.value.trim();
+        const typeItem = typeItemInput.value.trim();
+        const totalTaxes = totalTaxesInput.value.trim();
+        const salesPrice = salesPriceInput.value.trim();
+        const description = descriptionInput.value.trim();
+
+        // Validar que no haya campos vacíos
+        if (!name || !itemCode || !unitPrice || !typeItem || !totalTaxes || !salesPrice) {
+            Swal.fire({
+                icon: "error",
+                title: "Campos Requeridos",
+                text: "Por favor completa todos los campos obligatorios antes de guardar.",
+            });
+            return false;
+        }
+
+        // Validar que los números no sean negativos
+        if (parseFloat(unitPrice) < 0 || parseInt(itemCode) < 0 || parseFloat(totalTaxes) < 0 || parseFloat(salesPrice) < 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Valor Inválido",
+                text: "Los valores de Precio Unitario, Código, Total Impuestos y Precio de Venta no pueden ser negativos.",
+            });
+            return false;
+        }
+
+        return {
+            name,
+            itemCode,
+            unitPrice,
+            typeItem,
+            totalTaxes,
+            salesPrice,
+            description,
+        };
+    };
+
+    // Acción al hacer clic en el botón "Guardar"
+    saveButton.addEventListener("click", () => {
+        const productData = validateFields();
+        
+        if (!productData) return; // Detiene la ejecución si la validación falla
+
+        // Mostrar el objeto JSON en la consola
+        console.log(JSON.stringify(productData, null, 2));
+
+        // Mostrar alerta de éxito
+        Swal.fire({
+            icon: "success",
+            title: "Producto Guardado",
+            text: "La información del producto se ha guardado correctamente.",
+        });
+    });
+});
