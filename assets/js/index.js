@@ -280,6 +280,7 @@ function loadData() {
     });
 }
 
+// Construir tabla consulta de items
 function buildTable() {
     const tableContainer = document.getElementById("table-container");
 
@@ -324,6 +325,7 @@ function buildTable() {
         },
         initialLocale: "es-419",
         paginationSizeSelector: [10, 20, 50, 100],
+        
         columns: [
             { title: "#", field: "id", width: 80, hozAlign: "center", headerSort: false, headerFilter: true },
             { title: "Código", field: "code", headerFilter: true, widthGrow: 1 },
@@ -379,6 +381,88 @@ function buildTable() {
         ],
     });
 }
+// Ejemplo
+var table = new Tabulator("#table-taxes", {
+   ajaxURL: "assets/dataExample/taxes.json",
+ajaxConfig: "GET",
+    layout: "fitColumns",
+    responsiveLayout: "collapse",
+    tableClass: "table table-striped table-bordered table-hover",
+    initialLocale: "es-419",
+    langs: {
+        "es-419": {
+            data: {
+                loading: "Cargando datos...",
+                error: "Error al cargar datos.",
+            },
+        },
+    },
+    columns: [
+        { title: "#", field: "id", width: 80, hozAlign: "center", headerSort: false, headerFilter: true },
+        { title: "Código", field: "code", headerFilter: true, widthGrow: 1 },
+        { title: "Nombre", field: "name", headerFilter: true, widthGrow: 2 },
+        { title: "Descripción", field: "description", widthGrow: 3.5 },
+        { 
+            title: "Tasa de Impuesto", 
+            field: "rate", 
+            formatter: (cell) => {
+                const value = cell.getValue();
+                return `${(value * 100).toFixed(2)}%`; 
+                                // Convierte el decimal a porcentaje con 2 decimales
+            }, 
+            hozAlign: "right", // Alinear a la derecha
+            widthGrow: 1.2 
+        },
+      ]
+});
+
+
+//Construir tabla consulta de impuestos
+
+/*function buildtabletaxes(){
+    const tableContainer = document.getElementById("table-taxes");
+    const table = new Tabulator(tableContainer, {
+       // ajaxURL: "assets/dataExample/taxes.json",
+    //ajaxConfig: "GET",
+        layout: "fitColumns",
+        responsiveLayout: "collapse",
+        tableClass: "table table-striped table-bordered table-hover",
+        initialLocale: "es-419",
+        langs: {
+            "es-419": {
+                data: {
+                    loading: "Cargando datos...",
+                    error: "Error al cargar datos.",
+                },
+            },
+        },
+        columns: [
+            { title: "#", field: "id", width: 80, hozAlign: "center", headerSort: false, headerFilter: true },
+            { title: "Código", field: "code", headerFilter: true, widthGrow: 1 },
+            { title: "Nombre", field: "name", headerFilter: true, widthGrow: 2 },
+            { title: "Descripción", field: "description", widthGrow: 3.5 },
+            { 
+                title: "Tasa de Impuesto", 
+                field: "rate", 
+                formatter: (cell) => {
+                    const value = cell.getValue();
+                    return `${(value * 100).toFixed(2)}%`; 
+                                    // Convierte el decimal a porcentaje con 2 decimales
+                }, 
+                hozAlign: "right", // Alinear a la derecha
+                widthGrow: 1.2 
+            },
+          ]
+    });
+
+}
+$('#addTaxes').on('shown.bs.modal', function () {
+    console.log("Modal abierto, inicializando la tabla");
+    buildTableTaxes();
+});
+
+*/
+
 
 function deleteItem(itemId, row) {
     // Muestra una confirmación antes de eliminar

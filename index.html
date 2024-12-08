@@ -105,7 +105,7 @@
 
     <!-- Modal -->
 <div class="modal fade" id="addTaxes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl  modal-dialog-centered modal-dialog-scrollable" >
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="staticBackdropLabel">Impuestos</h1>
@@ -127,7 +127,11 @@
 
           <!--Contenido de Tabs-->
           <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-search-tab" tabindex="0">Ingresar Tablas</div>
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-search-tab" tabindex="0">
+               <p>Mostrar Datos</p>
+                <div id="table-taxes"> </div>
+
+            </div>
 
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-create-tab" tabindex="0">Ingresar Formulario</div>
 
@@ -140,7 +144,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" id="btnsave"  class="btn btn-primary">Guardar</button>
+          <button type="button" class="btn btn-primary">Guardar</button>
         </div>
       </div>
     </div>

@@ -1,0 +1,16 @@
+[
+    { "id": 1, 
+    "code": "TAX01", 
+    "name": "IVA",
+    "description": "Impuesto al Valor Agregado",
+    "rate": 0.16 },
+    { "id": 2, "code": "TAX02", "name": "ISR", "description": "Impuesto Sobre la Renta", "rate": 0.30 },
+    { "id": 3, "code": "TAX03", "name": "IEPS", "description": "Impuesto Especial sobre Producción y Servicios", "rate": 0.10 },
+    { "id": 4, "code": "TAX04", "name": "IGI", "description": "Impuesto General de Importación", "rate": 0.25 },
+    { "id": 5, "code": "TAX05", "name": "ISAN", "description": "Impuesto Sobre Automóviles Nuevos", "rate": 0.05 },
+    { "id": 6, "code": "TAX06", "name": "IEE", "description": "Impuesto sobre la Enajenación de Bienes Inmuebles", "rate": 0.20 },
+    { "id": 7, "code": "TAX07", "name": "IAE", "description": "Impuesto sobre Actividades Económicas", "rate": 0.15 },
+    { "id": 8, "code": "TAX08", "name": "ITBIS", "description": "Impuesto sobre Transferencia de Bienes Industrializados y Servicios", "rate": 0.18 },
+    { "id": 9, "code": "TAX09", "name": "ISR_Personas_Morales", "description": "Impuesto sobre la Renta para Personas Morales", "rate": 0.30 },
+    { "id": 10, "code": "TAX10", "name": "IVA_Exportaciones", "description": "Exención de IVA para Exportaciones", "rate": 0.00 }
+  ]
