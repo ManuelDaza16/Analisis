@@ -104,47 +104,78 @@
     </div>
 
     <!-- Modal -->
-<div class="modal fade" id="addTaxes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">Impuestos</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="addTaxes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Impuestos</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+    
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-search-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Consultar</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-create-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Crear</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-delete-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Eliminar</button>
+                        </li>
+                    </ul>
+    
+                    <!-- Contenido de Tabs -->
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-search-tab" tabindex="0">Ingresar Tablas</div>
+    
+                        <!-- Formulario en la pestaña Crear -->
+                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-create-tab" tabindex="0">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="taxName" class="form-label">Nombre del Impuesto</label>
+                                    <input type="text" class="form-control" id="taxName" placeholder="Ingresa el nombre del impuesto" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="taxType" class="form-label">Tipo de Impuesto</label>
+                                    <select class="form-select" id="taxType" required onchange="toggleTaxFields()">
+                                        <option value="">Selecciona un tipo</option>
+                                        <option value="porcentual">Porcentual</option>
+                                        <option value="nominal">Nominal</option>
+                                    </select>
+                                </div>
+                                <!-- Campos dinámicos -->
+                                <div class="mb-3" id="taxRateField" style="display: none;">
+                                    <label for="taxRate" class="form-label">Tasa de Impuesto (%)</label>
+                                    <input type="number" class="form-control" id="taxRate" placeholder="Ingresa la tasa de impuesto">
+                                </div>
+                                <div class="mb-3" id="nominalValueField" style="display: none;">
+                                    <label for="nominalValue" class="form-label">Valor Nominal</label>
+                                    <input type="number" class="form-control" id="nominalValue" placeholder="Ingresa el valor nominal">
+                                </div>
+                                <div class="mb-3" id="unitMeasureField" style="display: none;">
+                                    <label for="unitMeasure" class="form-label">Unidad de Medida</label>
+                                    <select class="form-select" id="unitMeasure">
+                                        <option value="">Selecciona una unidad</option>
+                                        <option value="unidad">Unidad</option>
+                                        <option value="litro">Litro</option>
+                                        <option value="kilo">Kilo</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+    
+                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-delete-tab" tabindex="0">Ingresar Info</div>
+                    </div>
+                </div>
+    
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnsave" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="pills-search-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Consultar</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="pills-create-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Crear</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="pills-delete-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Eliminar</button>
-            </li>
-          </ul>
-
-          <!--Contenido de Tabs-->
-          <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-search-tab" tabindex="0">Ingresar Tablas</div>
-
-            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-create-tab" tabindex="0">Ingresar Formulario</div>
-
-            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-delete-tab" tabindex="0">Ingresar Info</div>
-
-          </div>
-
-        
-           
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" id="btnsave"  class="btn btn-primary">Guardar</button>
-        </div>
-      </div>
     </div>
-  </div>
     
     <div class="modal fade" id="addItems" data-bs-backdrop="static">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -262,115 +293,35 @@
 
     
     <!-- Modal para mostrar impuestos -->
-    <div class="modal fade" id="addItems" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal fade" id="taxesModal" tabindex="-1" aria-labelledby="taxesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
-                
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Crear Nuevo Item</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header gradient-2-45">
+                    <h5 class="modal-title text-light" id="taxesModalLabel">Impuestos del Ítem</h5>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="row mb-3">
-                            <div class="col-md-5">
-                                <label for="name" class="form-label">Nombre del Producto</label>
-                                <input type="text" class="form-control" id="name"
-                                    placeholder="Ingresa el nombre del producto" required>
-                            </div>
-                            <div class="col-md-5">
-                                <label for="itemCode" class="form-label">Código</label>
-                                <input type="text" class="form-control" id="itemCode"
-                                    placeholder="Ingresa el código del producto" required>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="row p-0">
-                                    <div class="col-12"> <label for="status" class="form-label">Estado</label></div>
-                                    <div class="col-12 d-flex justify-content-start align-content-center">
-                                        <label class="toggle-switch">
-                                            <input type="checkbox" id="status">
-                                            <span class="slider"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md">
-                                <label for="unitPrice" class="form-label">Precio Unitario</label>
-                                <input type="text" class="form-control" id="unitPrice"
-                                    placeholder="Ingresa el precio unitario" required>
-                            </div>
-                            <div class="col-md">
-                                <label for="typeItem" class="form-label">Tipo de Item</label>
-                                <div id="typeItem"></div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col">
-                                <table class="table table-bordered" id="combosTableAdd" style="display: none;">
-                                    <thead>
-                                        <tr>
-                                            <th>Código</th>
-                                            <th>Nombre</th>
-                                            <th>Tipo</th>
-                                            <th>Precio Unitario</th>
-                                            <th>Precio Venta</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="combosTableBody">
-                                        <!-- Fila inicial generada dinámicamente -->
-                                    </tbody>
-                                </table>
-                                <button class="btn btn-primary" type="button" onclick="addRowToCombosTable()">Agregar
-                                    Fila</button>
-
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="" class="form-label">Agregar Impuestos</label>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Tipo Impuesto</th>
-                                        <th>Tasa Impuesto (%)</th>
-                                        <th>Valor Nominal</th>
-                                        <th>Unidad de Medida</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="taxesTableBody">
-                                    <!-- Filas dinámicas -->
-                                </tbody>
-                            </table>
-                            <button id="addRow" class="btn btn-outline-primary px-5">Agregar Línea +</button>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md">
-                                <label for="totalTaxes" class="form-label">Total Impuestos</label>
-                                <input type="text" class="form-control" id="totalTaxes"
-                                    placeholder="Ingresa el total de impuestos" required>
-                            </div>
-                            <div class="col-md">
-                                <label for="salesPrice" class="form-label">Precio de Venta</label>
-                                <input type="text" class="form-control" id="salesPrice"
-                                    placeholder="Ingresa el precio de venta" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="itemDescription" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="itemDescription" rows="3"
-                                placeholder="Ingresa la descripción del producto"></textarea>
-                        </div>
-                    </form>
+                    <!-- Contenedor para la tabla de impuestos -->
+                    <div id="taxesTableContainer"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" id="btnsave"  class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="combosModal" tabindex="-1" aria-labelledby="combosModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header gradient-2-45">
+                    <h5 class="modal-title text-light" id="combosModalLabel">Ítems del Combo</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Contenedor para la tabla de combos -->
+                    <div id="combosTableContainer"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
