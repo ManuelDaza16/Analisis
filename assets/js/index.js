@@ -623,3 +623,25 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+// funcion para impuestos
+
+function toggleTaxFields() {
+    const taxType = document.getElementById('taxType').value;
+    const taxRateField = document.getElementById('taxRateField');
+    const nominalValueField = document.getElementById('nominalValueField');
+    const unitMeasureField = document.getElementById('unitMeasureField');
+
+    if (taxType === 'porcentual') {
+        taxRateField.style.display = 'block';
+        nominalValueField.style.display = 'none';
+        unitMeasureField.style.display = 'block';
+    } else if (taxType === 'nominal') {
+        taxRateField.style.display = 'none';
+        nominalValueField.style.display = 'block';
+        unitMeasureField.style.display = 'block';
+    } else {
+        taxRateField.style.display = 'none';
+        nominalValueField.style.display = 'none';
+        unitMeasureField.style.display = 'none';
+    }
+}
