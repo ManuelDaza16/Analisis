@@ -738,8 +738,9 @@ function toggleTaxFields() {
 
     if (taxType === 'porcentual') {
         taxRateField.style.display = 'block';
-        nominalValueField.style.display = 'none';
         itemDescription.style.display = 'block';
+        nominalValueField.style.display = 'none';
+        unitMeasureField.style.display = 'none';
     } else if (taxType === 'nominal') {
         taxRateField.style.display = 'none';
         nominalValueField.style.display = 'block';
@@ -748,5 +749,6 @@ function toggleTaxFields() {
         taxRateField.style.display = 'none';
         nominalValueField.style.display = 'none';
         unitMeasureField.style.display = 'none';
+        itemDescription.style.display = 'none';
     }
 }
