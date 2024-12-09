@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "code": "TAXN01",
+        "name": "Impuesto al Alcohol",
+        "description": "Impuesto por cada grado de alcohol en la bebida",
+        "value": 2,
+        "unit": "grados",
+        "rate": 500.00
+    },
+    {
+        "id": 2,
+        "code": "TAXN02",
+        "name": "Impuesto al Azúcar",
+        "description": "Impuesto por cada 100 gramos de azúcar añadida",
+        "value": 100,
+        "unit": "gramos",
+        "rate": 50.00
+    },
+    {
+        "id": 3,
+        "code": "TAXN03",
+        "name": "Impuesto de Emisión de Carbono",
+        "description": "Impuesto por cada tonelada de CO2 emitida",
+        "value": 1,
+        "unit": "tonelada",
+        "rate": 1500.00
+    },
+    {
+        "id": 4,
+        "code": "TAXN04",
+        "name": "Impuesto a la Nicotina",
+        "description": "Impuesto por cada miligramo de nicotina en productos",
+        "value": 1,
+        "unit": "mg",
+        "rate": 10.00
+    },
+    {
+        "id": 5,
+        "code": "TAXN05",
+        "name": "Impuesto de Consumo Energético",
+        "description": "Impuesto por cada kilovatio-hora consumido",
+        "value": 1,
+        "unit": "kWh",
+        "rate": 5.00
+    },
+    {
+        "id": 6,
+        "code": "TAXN06",
+        "name": "Impuesto al Peso de Vehículos",
+        "description": "Impuesto por cada 100 kilogramos de peso del vehículo",
+        "value": 100,
+        "unit": "kg",
+        "rate": 200.00
+    },
+    {
+        "id": 7,
+        "code": "TAXN07",
+        "name": "Impuesto de Residuos Plásticos",
+        "description": "Impuesto por cada kilogramo de plástico generado",
+        "value": 1,
+        "unit": "kg",
+        "rate": 100.00
+    },
+    {
+        "id": 8,
+        "code": "TAXN08",
+        "name": "Impuesto al Agua Embotellada",
+        "description": "Impuesto por cada litro de agua embotellada",
+        "value": 1,
+        "unit": "litro",
+        "rate": 2.00
+    },
+    {
+        "id": 9,
+        "code": "TAXN09",
+        "name": "Impuesto de Emisión de Metano",
+        "description": "Impuesto por cada kilogramo de metano emitido",
+        "value": 1,
+        "unit": "kg",
+        "rate": 300.00
+    },
+    {
+        "id": 10,
+        "code": "TAXN10",
+        "name": "Impuesto a Residuos Electrónicos",
+        "description": "Impuesto por cada kilogramo de residuos electrónicos generados",
+        "value": 1,
+        "unit": "kg",
+        "rate": 250.00
+    }
+]

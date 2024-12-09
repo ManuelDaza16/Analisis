@@ -177,3 +177,9 @@ input:checked + .slider{
 input:checked + .slider::before{ 
     transform: translateX(20px);
 }
+/* Ajustar tamaño de modal impuesto*/
+#modal-taxes {
+    max-height: 90vh; 
+    margin: 0 auto;
+}
+

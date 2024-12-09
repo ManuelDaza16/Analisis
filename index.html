@@ -105,7 +105,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="addTaxes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable " id="modal-taxes">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Impuestos</h1>
@@ -127,8 +127,19 @@
     
                     <!-- Contenido de Tabs -->
                     <div class="tab-content" id="pills-tabContent">
+                        <!--Mostrar Contenido-->
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-search-tab" tabindex="0">
-                            <div id="table-taxes"></div>
+                            <div class="btn-group d-flex" role="group" aria-label="Toggle between Nominal and Porcentual">
+                                <button type="button" id="btnNominal"  class="btn btn-dark">Nominal</button>
+                                <button type="button" id="btnPorcentual"  class="btn btn-dark">Porcentual</button>
+                            </div>
+            
+                            <!-- Contenedores para los divs -->
+                            <div id="table-taxes-2" class="mt-3" style="display: none;"> </div>
+            
+                            <div id="table-taxes-1" class="mt-3" style="display: none;"> </div>
+
+
                         </div>
     
                         <!-- Formulario en la pestaña Crear -->

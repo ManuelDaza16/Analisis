@@ -381,9 +381,38 @@ function buildTable() {
         ],
     });
 }
-// Ejemplo
-var table = new Tabulator("#table-taxes", {
-   ajaxURL: "assets/dataExample/taxes.json",
+
+const btnNominal = document.getElementById("btnNominal");
+const btnPorcentual = document.getElementById("btnPorcentual");
+const nominalContainer = document.getElementById("table-taxes-2");
+const porcentualContainer = document.getElementById("table-taxes-1");
+
+// Mostrar Nominal
+btnNominal.addEventListener("click", () => {
+    nominalContainer.style.display = "block"; 
+    porcentualContainer.style.display = "none"; 
+
+    btnNominal.classList.add("btn-dark");
+    btnNominal.classList.remove("btn-outline-dark");
+    btnPorcentual.classList.add("btn-outline-dark");
+    btnPorcentual.classList.remove("btn-dark");
+});
+
+// Mostrar Porcentual
+btnPorcentual.addEventListener("click", () => {
+    porcentualContainer.style.display = "block"; 
+    nominalContainer.style.display = "none"; 
+
+    btnPorcentual.classList.add("btn-dark");
+    btnPorcentual.classList.remove("btn-outline-dark");
+    btnNominal.classList.add("btn-outline-dark");
+    btnNominal.classList.remove("btn-dark");
+});
+
+
+// Construir tabla consulta de impuestos Porcentuales
+var tableTaxesP = new Tabulator("#table-taxes-1", {
+   ajaxURL: "assets/data/taxes.json",
 ajaxConfig: "GET",
     layout: "fitColumns",
     responsiveLayout: "collapse",
@@ -416,13 +445,43 @@ ajaxConfig: "GET",
       ]
 });
 
-
-$('#addTaxes').on('shown.bs.modal', function () {
-    console.log("Modal abierto, inicializando la tabla");
-    buildTableTaxes();
-});
-
-*/
+// Construir tabla consulta de impuestos Nominales
+var tableTaxesN = new Tabulator("#table-taxes-2", {
+    ajaxURL: "assets/data/taxesN.json",
+ ajaxConfig: "GET",
+     layout: "fitColumns",
+     responsiveLayout: "collapse",
+     tableClass: "table table-striped table-bordered table-hover",
+     initialLocale: "es-419",
+     langs: {
+         "es-419": {
+             data: {
+                 loading: "Cargando datos...",
+                 error: "Error al cargar datos.",
+             },
+         },
+     },
+     columns: [
+         { title: "#", field: "id", width: 80, hozAlign: "center", headerSort: false, headerFilter: true,widthGrow: 0.5 },
+         { title: "Código", field: "code", headerFilter: true, widthGrow: 1 },
+         { title: "Nombre", field: "name", headerFilter: true, widthGrow: 2.5 },
+         { title: "Descripción", field: "description", widthGrow: 3.8 },
+         { title: "Valor", field: "value", widthGrow: 1 },
+         { title: "Unidad de Medida", field: "unit",headerFilter: true, widthGrow: 1.5 },
+         { 
+            title: "Tarifa de Impuesto", 
+            field: "rate", 
+            formatter: "money", 
+            formatterParams: {
+                symbol: "$", 
+                precision: 2 
+            },
+            hozAlign: "right", // Opcional: alinear los valores a la derecha
+            widthGrow: 1.2 // Ajusta el ancho de la columna
+        }
+       ]
+ });
+ 
 
 
 function deleteItem(itemId, row) {
