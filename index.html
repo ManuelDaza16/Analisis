@@ -152,16 +152,30 @@
                                     <input type="number" class="form-control" id="taxRate" placeholder="Ingresa la tasa de impuesto">
                                 </div>
                                 <div class="mb-3" id="nominalValueField" style="display: none;">
-                                    <label for="nominalValue" class="form-label">Valor Nominal</label>
-                                    <input type="number" class="form-control" id="nominalValue" placeholder="Ingresa el valor nominal">
+                                    <label for="percentage" class="form-label">Porcentaje o Cantidad</label>
+                                    <input type="number" class="form-control" id="percentage" placeholder="Ingresa el porcentaje o la cantidad">
                                 </div>
+
+                                 <div class="mb-3" id="nominalValueField" style="display: none;">
+                                    <label for="taxRate" class="form-label">Tarifa de Impuestos</label>
+                                    <input type="number" class="form-control" id="taxeRate" placeholder="Ingresa una tarifa de impuestos">
+                                </div>
+                                <div class="mb-3" id="itemDescription" style="display: none;">
+                                    <label for="itemDescription" class="form-label">Descripcion</label>
+                                    <input type="text" class="form-control" id="itemDescription" placeholder="Ingresa una Descripcion">
+                                </div>
+                                
+
                                 <div class="mb-3" id="unitMeasureField" style="display: none;">
                                     <label for="unitMeasure" class="form-label">Unidad de Medida</label>
                                     <select class="form-select" id="unitMeasure">
                                         <option value="">Selecciona una unidad</option>
                                         <option value="unidad">Unidad</option>
                                         <option value="litro">Litro</option>
-                                        <option value="kilo">Kilo</option>
+                                        <option value="kilo">Kilogramos</option>
+                                        <option value="kilo">mililitros</optio>
+                                        <option value="kilo">metros/option>
+                                        
                                     </select>
                                 </div>
                             </form>
