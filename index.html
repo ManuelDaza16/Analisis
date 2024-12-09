@@ -192,13 +192,28 @@
                             </form>
                         </div>
     
-                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-delete-tab" tabindex="0">Ingresar Info</div>
+                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-delete-tab" tabindex="0">
+                            <h1>Seleccionar Impuesto</h1>
+                            
+                            <select class="form-select" id="taxSelect" required onchange=" ">
+                                <option value="">Selecciona un Impuesto</option>
+                                
+                            </select>
+
+
+
+                            
+                            <div class="d-flex justify-content-center align-items-center mt-5">
+                             <button type="button"  class="btn btn-danger ">Eliminar</button>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
     
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" id="btnsave" class="btn btn-primary">Guardar</button>
+                    <button type="button"  id="taxes-btn-cancel" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="taxes-btn-save" class="btn btn-primary">Guardar</button>
                 </div>
             </div>
         </div>

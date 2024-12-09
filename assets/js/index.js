@@ -466,7 +466,7 @@ var tableTaxesN = new Tabulator("#table-taxes-2", {
          { title: "Código", field: "code", headerFilter: true, widthGrow: 1 },
          { title: "Nombre", field: "name", headerFilter: true, widthGrow: 2.5 },
          { title: "Descripción", field: "description", widthGrow: 3.8 },
-         { title: "Valor", field: "value", widthGrow: 1 },
+         { title: "Cantidad", field: "value", widthGrow: 1 },
          { title: "Unidad de Medida", field: "unit",headerFilter: true, widthGrow: 1.5 },
          { 
             title: "Tarifa de Impuesto", 
@@ -482,6 +482,63 @@ var tableTaxesN = new Tabulator("#table-taxes-2", {
        ]
  });
  
+//Mostrar-Ocultar Botones de Impuestos
+const btnSearch = document.getElementById("pills-search-tab");
+const btnCreate= document.getElementById("pills-create-tab");
+const btnDelete=document.getElementById("pills-delete-tab");
+const btnSaveOfTaxes=document.getElementById("taxes-btn-cancel");
+const btnCancelOfTaxes=document.getElementById("taxes-btn-save");
+
+btnSaveOfTaxes.style.display = "block"; 
+btnCancelOfTaxes.style.display = "none"; 
+
+btnSearch.addEventListener("click", () => {
+    btnSaveOfTaxes.style.display = "block"; 
+    btnCancelOfTaxes.style.display = "none"; 
+});
+btnCreate.addEventListener("click", () => {
+    btnSaveOfTaxes.style.display = "block"; 
+    btnCancelOfTaxes.style.display = "block"; 
+});
+btnDelete.addEventListener("click", () => {
+    btnSaveOfTaxes.style.display = "none"; 
+    btnCancelOfTaxes.style.display = "none"; 
+});
+
+//Muestra Los impuestos existentes para ELiminar
+
+function fillTaxSelect(taxesData1, taxesData2) {
+    const taxSelect = document.getElementById('taxSelect');
+
+    taxSelect.innerHTML = '<option value="">Selecciona un impuesto</option>';
+  
+    const combinedData = [...taxesData1, ...taxesData2];
+    combinedData.forEach(tax => {
+        const option = document.createElement('option');
+        option.value = tax.id;  // Usamos el ID del impuesto como valor
+        option.textContent = tax.name;  // Mostramos el nombre del impuesto
+        taxSelect.appendChild(option);
+    });
+}
+  function loadTaxesData() {
+
+    fetch('assets/data/taxes.json') // Ruta de la BD
+    .then(response => response.json())
+    .then(data1 => {
+        
+        fetch('assets/data/taxesN.json') // Ruta de la 2 BD
+        .then(response => response.json())
+        .then(data2 => {
+            fillTaxSelect(data1, data2); // Llamamos a la función con ambas bases de datos
+        })
+        .catch(error => console.error('Error al cargar la segunda base de datos:', error));
+    })
+    .catch(error => console.error('Error al cargar la primera base de datos:', error));
+}
+document.addEventListener('DOMContentLoaded', loadTaxesData);
+
+// Hacer algo con el impuesto 
+
 
 
 function deleteItem(itemId, row) {
