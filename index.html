@@ -88,7 +88,7 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <button class="btn btn-outline-dark my-3" data-bs-toggle="modal" data-bs-target="#addItems">
+                        <button class="btn btn-outline-dark my-3" data-bs-toggle="modal" data-bs-target="#addItems" id="btnModalItem">
                             Crear Nuevo Item</button>
                         <button type="button" class="btn btn-outline-dark my-3" data-bs-toggle="modal" id="btnModalTaxe" data-bs-target="#addTaxes">
                                  Gestionar Impuestos </button>
@@ -260,10 +260,16 @@
                             </div>
                             <div class="col-md">
                                 <label for="typeItem" class="form-label">Tipo de Item</label>
-                                <div id="typeItem"></div>
+                                <select class="form-select" id="typeItem" required>
+                                    <option value="" disabled selected>Seleccionar</option>
+                                    <option value="producto">Producto</option>
+                                    <option value="servicios">Servicios</option>
+                                    <option value="combo">Combo</option>
+                                </select>
                             </div>
                         </div>
 
+                    <!--INICIO: No Comprendo Que Pasa No Me Deja Quitarlo, Sino Elimina Las Tablas-->
                         <div class="row mb-3">
                             <div class="col">
                                 <table class="table table-bordered" id="combosTableAdd" style="display: none;">
@@ -278,7 +284,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="combosTableBody">
-                                        <!-- Fila inicial generada dinámicamente -->
+                                       
                                     </tbody>
                                 </table>
                                 <button class="btn btn-primary" type="button" onclick="addRowToCombosTable()">Agregar
@@ -287,7 +293,9 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
+                        <!--FIN: No Comprendo Que Pasa-->
+                       
+                    <div class="row mb-3">
                             <label for="" class="form-label">Agregar Impuestos</label>
                             <table class="table table-bordered">
                                 <thead>
@@ -300,22 +308,53 @@
                                     </tr>
                                 </thead>
                                 <tbody id="taxesTableBody">
-                                    <!-- Filas dinámicas -->
+                                   
+                                    <tr>
+                                        <td>
+                                            <select class="form-select" id="taxSelect2">
+                                                <option value="Porcentual">Seleccionar Impuesto</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" step="0.01" class="form-control" placeholder="Tasa Impuesto" id="tax-rate">
+                                        </td>
+                                        <td>
+                                            <input type="number" step="0.01" class="form-control" placeholder="Valor Nominal" id="nominal-value">
+                                        </td>
+                                        <td>
+                                            <select class="form-select" id="taxSelect3">
+                                                <option value="Unidad1">Seleccionar Unidad</option>
+                                               
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                   
+                                   
                                 </tbody>
                             </table>
                             <button id="addRow" class="btn btn-outline-primary px-5">Agregar Línea +</button>
                         </div>
-
+                   
                         <div class="row mb-3">
                             <div class="col-md">
                                 <label for="totalTaxes" class="form-label">Total Impuestos</label>
-                                <input type="text" class="form-control" id="totalTaxes"
-                                    placeholder="Ingresa el total de impuestos" required>
+                                <!-- Campo de solo lectura para el total de impuestos -->
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="totalTaxes" placeholder="Ingresa el total de impuestos" readonly>
+                                    <!-- Botón de Actualizar -->
+                                    <button class="btn btn-primary" id="btnUpdateTotalTaxes">Actualizar</button>
+                                </div>
                             </div>
                             <div class="col-md">
                                 <label for="salesPrice" class="form-label">Precio de Venta</label>
                                 <input type="text" class="form-control" id="salesPrice"
                                     placeholder="Ingresa el precio de venta" required>
+                                <small id="priceSuggestion" class="form-text text-muted" style="display:none;">
+                                        Recomendable: mayor al precio unitario + impuestos. <span id="totalPriceSuggestion"></span>
+                                </small>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -326,8 +365,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" id="btnsave"  class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal" id="btnCancelItem">Cancelar</button>
+                    <button type="button" id="btnSaveNewItem"  class="btn btn-primary">Guardar</button>
                 </div>
             </div>
         </div>

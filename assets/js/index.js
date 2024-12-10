@@ -10,7 +10,7 @@ let combosTable = null; // Variable para la instancia de Tabulator
 
 const toggleSwitch = document.getElementById('status')
 
-const taxesTableBody = document.getElementById("taxesTableBody");
+
 
 let filteredItems;
 
@@ -33,22 +33,26 @@ toggleSwitch.addEventListener("change", () => {
     }
 })
 
-// Opciones para los selects
-const taxTypeOptions = [
-    { label: "01 - IVA", value: "01 - IVA" },
-    { label: "02 - IC", value: "02 - IC" },
-    { label: "03 - RETE FUENTE", value: "03 - RETE FUENTE" },
-    { label: "04 - INC Bolsas", value: "04 - INC Bolsas" },
-    { label: "05 - INC Combustibles", value: "05 - INC Combustibles" }
-];
 
-const measureUnitOptions = [
-    { label: "NIU-número de", value: "NIU-número de" },
-    { label: "KG-kilogramos", value: "KG-kilogramos" },
-    { label: "LT-litros", value: "LT-litros" },
-    { label: "M-metros", value: "M-metros" }
-];
 
+//Funcion para sugerir precio de venta
+$(document).ready(function() {
+    $('#salesPrice').on('input', function() {
+        const salesPrice = parseFloat($(this).val()) || 0;
+        const unitPrice = parseFloat($('#unitPrice').val()) || 0;
+        const totalTaxes = parseFloat($('#totalTaxes').val()) || 0;
+        const recommendedPrice = unitPrice + totalTaxes;
+
+        $('#totalPriceSuggestion').text(recommendedPrice.toFixed(2));
+
+        // Si el precio de venta es menor que el recomendado, muestra el mensaje
+        if (salesPrice < recommendedPrice) {
+            $('#priceSuggestion').show();  // Muestra el mensaje
+        } else {
+            $('#priceSuggestion').hide();  // Oculta el mensaje
+        }
+    });
+});
 
 //Agregar un nuevo impuesto
 $(document).ready(function () {
@@ -119,7 +123,271 @@ $(document).ready(function () {
     });
 });
 
-// Función para agregar una nueva fila
+//Funcion para actualizar el total de impuestos
+$(document).ready(function () {
+    const unitPriceInput = $('#unitPrice'); // Precio unitario
+    const taxesTableBody = $('#taxesTableBody'); // Cuerpo de la tabla
+    const taxesTotalInput = $('#totalTaxes'); // Campo de total de impuestos
+
+    const btnUpdateTaxes=document.getElementById("btnUpdateTotalTaxes");
+
+
+    // Función para calcular el total de impuestos
+    function calculateTotalTaxes() {
+        const unitPrice = parseFloat(unitPriceInput.val()) || 0; // Obtener el precio unitario
+        let totalTaxes = 0;
+
+        // Iterar sobre todas las filas de la tabla
+        taxesTableBody.find('tr').each(function () {
+            const taxRate = parseFloat($(this).find('td:nth-child(2)').text()) || 0; // Leer Tasa Impuesto
+            const nominalValue = parseFloat($(this).find('td:nth-child(3)').text()) || 0; // Leer Valor Nominal
+
+            // Calcular impuestos proporcionales y nominales
+            const proportionalTax = (taxRate / 100) * unitPrice;
+
+            // Sumar al total de impuestos
+            totalTaxes += proportionalTax + nominalValue;
+        });
+
+        // Actualizar el campo de Total Impuestos
+        taxesTotalInput.val(totalTaxes.toFixed(2));
+    }
+
+    // Evento para detectar cambios en el precio unitario
+    unitPriceInput.on('input', function () {
+        calculateTotalTaxes();
+    });
+
+    // Evento para recalcular impuestos cuando se agrega o elimina una fila
+    $('#addRow').on('click', function () {
+        calculateTotalTaxes();
+    });
+
+    $(btnUpdateTaxes).click(function(){
+        calculateTotalTaxes();
+    })
+    // Evento para recalcular impuestos cuando se elimina una fila
+    taxesTableBody.on('click', '.btn-danger', function () {
+        calculateTotalTaxes();
+    });
+
+});
+
+//Funciones para agregar nueva fila de impuestos "actualizado"
+$(document).ready(function(){
+    
+
+
+  const taxesTableBody = document.getElementById("taxesTableBody");
+    const addRow=()=>{
+        const taxSelect2 = document.getElementById("taxSelect2");
+        const taxRateInput = document.getElementById("tax-rate");
+        const nominalValueInput = document.getElementById("nominal-value");
+        const taxSelect3 = document.getElementById("taxSelect3");
+
+        if (!taxSelect2.value || !taxRateInput.value || !nominalValueInput.value || !taxSelect3.value) {
+            // Si algún campo está vacío, agregar el borde rojo en el campo vacío
+            if (!taxSelect2.value) taxSelect2.classList.add('border-danger');
+            if (!taxRateInput.value) taxRateInput.classList.add('border-danger');
+            if (!nominalValueInput.value) nominalValueInput.classList.add('border-danger');
+            if (!taxSelect3.value) taxSelect3.classList.add('border-danger');
+            
+            alert("Hay Campos Vacios");
+            return;
+        } else {
+            // Limpiar los bordes rojos si los campos están completos
+            taxSelect2.classList.remove('border-danger');
+            taxRateInput.classList.remove('border-danger');
+            nominalValueInput.classList.remove('border-danger');
+            taxSelect3.classList.remove('border-danger');
+        }
+
+
+        const row = document.createElement("tr");
+
+        // Columna Tipo Impuesto
+        const taxTypeCell = document.createElement("td");
+        taxTypeCell.textContent = taxSelect2.options[taxSelect2.selectedIndex].text;
+    
+        // Columna Tasa Impuesto
+        const taxRateCell = document.createElement("td");
+        taxRateCell.textContent = taxRateInput.value;
+    
+        // Columna Valor Nominal
+        const nominalValueCell = document.createElement("td");
+        nominalValueCell.textContent = nominalValueInput.value;
+    
+        // Columna Unidad de Medida
+        const measureUnitCell = document.createElement("td");
+        measureUnitCell.textContent = taxSelect3.options[taxSelect3.selectedIndex].text;
+    
+        // Columna Acciones (Botón Eliminar)
+        const actionsCell = document.createElement("td");
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "btn btn-danger btn-sm";
+        deleteButton.innerText = "Eliminar";
+        deleteButton.onclick = () => row.remove();  // Eliminar la fila
+        actionsCell.appendChild(deleteButton);
+    
+        // Agregar las celdas a la fila
+        row.appendChild(taxTypeCell);
+        row.appendChild(taxRateCell);
+        row.appendChild(nominalValueCell);
+        row.appendChild(measureUnitCell);
+        row.appendChild(actionsCell);
+    
+        // Agregar la fila al cuerpo de la tabla
+        taxesTableBody.appendChild(row);
+       
+    
+        // Limpiar los campos de la fila activa después de agregarla
+        taxSelect2.value = '';
+        taxRateInput.value = '';
+        nominalValueInput.value = '';
+        taxSelect3.value = '';
+
+    }
+document.getElementById("addRow").addEventListener("click", addRow);
+
+
+function fillTaxSelect2(taxesData) {
+    const taxSelect = document.getElementById('taxSelect2');
+
+    // Limpiar el select antes de llenarlo
+    taxSelect.innerHTML = '<option value="">Selecciona un impuesto</option>';
+  
+    // Recorrer los impuestos y agregar las opciones al select
+    taxesData.forEach(tax => {
+        const option = document.createElement('option');
+        option.value = tax.id;  // Usamos el ID del impuesto como valor
+        option.textContent = tax.name;  // Mostramos el nombre del impuesto
+        taxSelect.appendChild(option);
+    });
+}
+
+function loadTaxesData2() {
+    fetch("http://3.17.151.214/impuestos") // Ruta de la BD
+    .then(response => response.json())
+    .then(data => {
+        fillTaxSelect2(data.data); // acceder al array de impuestos
+    })
+    .catch(error => console.error('Error al cargar la base de datos:', error));
+}
+$('#btnModalItem').click( function () {
+    // Llamar a la función que carga los datos de los impuestos
+    loadTaxesData2();
+});
+
+function fillTaxSelect3(taxesData) {
+    const taxSelect = document.getElementById('taxSelect3');
+
+    // Limpiar el select antes de llenarlo
+    taxSelect.innerHTML = '<option value="">Selecciona Unidad</option>';
+  
+    // Recorrer los impuestos y agregar las opciones al select
+    taxesData.forEach(tax => {
+        const option = document.createElement('option');
+        option.value = tax.id;  // Usamos el ID del impuesto como valor
+        option.textContent = tax.name;  // Mostramos el nombre del impuesto
+        taxSelect.appendChild(option);
+    });
+}
+
+
+function loadTaxesData3() {
+    fetch("http://3.17.151.214/medidas") // Ruta de la BD
+    .then(response => response.json())
+    .then(data => {
+        fillTaxSelect3(data.data); // acceder al array de impuestos
+    })
+    .catch(error => console.error('Error al cargar la base de datos:', error));
+}
+$('#btnModalItem').click( function () {
+    // Llamar a la función que carga los datos de los impuestos
+    loadTaxesData3();
+});
+
+
+});
+
+//Funcion para crear nuevo item
+$(document).ready(function () {
+    
+    const modal = $("#addItems"); 
+    $("#btnSaveNewItem").click(function(e){
+
+   // modal.find("#btnSaveItem").on("click", function (e) {
+      
+        e.preventDefault(); 
+    
+        // Capturar los datos del formulario
+        const idItem = 0;
+        const codeItem = modal.find("#itemCode").val().trim(); 
+        const typeItem = $('#typeItem').val(); 
+        const nameItem = modal.find("#name").val().trim();
+        const descriptionItem = modal.find("#itemDescription").val().trim();
+        const unitPriceItem = modal.find("#unitPrice").val().trim();
+        const totalTaxesItem = modal.find("#totalTaxes").val().trim();
+        const salesPriceItem = modal.find("#salesPrice").val().trim(); 
+        const statusItem = modal.find("#status").prop("checked"); 
+
+        const taxData = {
+            id: idItem, 
+            code: codeItem ,
+            typeItem: typeItem,
+            name:nameItem,
+            description:descriptionItem,
+            unitPrice:unitPriceItem,
+            totalTaxes:totalTaxesItem,
+            salesPrice: salesPriceItem,
+            status:statusItem,
+        };
+       
+        console.log("Datos que se enviarán al servidor:", taxData);
+        // Validar los campos
+        if (!codeItem || !nameItem || !unitPriceItem || !salesPriceItem) {
+            Swal.fire({
+                icon: "error",
+                title: "Campos vacíos",
+                text: "Por favor, complete todos los campos requeridos.",
+                confirmButtonText: "Cerrar",
+            });
+            return;
+        }
+  
+        // Enviar los datos con AJAX
+        $.ajax({
+            url: "http://3.17.151.214/items", 
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(taxData),
+            success: function (response) {
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Enviado!",
+                    text: `Item enviado exitosamente: ${response.message}`,
+                    confirmButtonText: "Cerrar",
+                });
+                
+                modal.modal("hide"); // Ocultar el modal tras el envío
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error al enviar",
+                    text: `No se pudo enviar el impuesto. Detalle: ${xhr.responseText || error}`,
+                    confirmButtonText: "Cerrar",
+                });
+            },
+        });
+    });
+});
+
+
+
+
+
+/* Función para agregar una nueva fila
 const addRow = () => {
     const row = document.createElement("tr");
 
@@ -177,12 +445,12 @@ const addRow = () => {
     // Agregar fila a la tabla
     taxesTableBody.appendChild(row);
 };
-
+*/
 // Agregar evento al botón
 document.getElementById("addRow").addEventListener("click", addRow);
 
 // Agregar una fila inicial
-addRow();
+// addRow();
 
 function showTaxesModal(itemId) {
     // Llamada AJAX para obtener los impuestos
@@ -327,7 +595,7 @@ function buildCombosTable() {
     });
 }
 
-// Cargar datos con jQuery AJAX
+// Cargar datos Items con jQuery AJAX 
 function loadData() {
     $.ajax({
         url: 'http://3.17.151.214/items', // Cambia esta URL por tu endpoint real
@@ -871,6 +1139,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 })
 
+/*
 document.addEventListener("DOMContentLoaded", () => {
     const saveButton = document.querySelector("#btnsave");
     const nameInput = document.getElementById("name");
@@ -939,6 +1208,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+*/
 // funcion para impuestos
 
 function toggleTaxFields() {
