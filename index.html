@@ -90,7 +90,7 @@
                     <div class="col-12">
                         <button class="btn btn-outline-dark my-3" data-bs-toggle="modal" data-bs-target="#addItems">
                             Crear Nuevo Item</button>
-                        <button type="button" class="btn btn-outline-dark my-3" data-bs-toggle="modal" data-bs-target="#addTaxes">
+                        <button type="button" class="btn btn-outline-dark my-3" data-bs-toggle="modal" id="btnModalTaxe" data-bs-target="#addTaxes">
                                  Gestionar Impuestos </button>
                     </div>
                     
@@ -130,8 +130,8 @@
                         <!--Mostrar Contenido-->
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-search-tab" tabindex="0">
                             <div class="btn-group d-flex" role="group" aria-label="Toggle between Nominal and Porcentual">
-                                <button type="button" id="btnNominal"  class="btn btn-dark">Nominal</button>
-                                <button type="button" id="btnPorcentual"  class="btn btn-dark">Porcentual</button>
+                              <!-- <button type="button" id="btnNominal"  class="btn btn-dark">Nominal</button>   -->
+                                <button type="button" id="btnPorcentual"  class="btn btn-dark">Consultar Impuestos</button>
                             </div>
             
                             <!-- Contenedores para los divs -->
@@ -144,17 +144,17 @@
     
                         <!-- Formulario en la pestaña Crear -->
                         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-create-tab" tabindex="0">
-                            <form>
+                            <form id="taxForm">
                                 <div class="mb-3">
                                     <label for="taxName" class="form-label">Nombre del Impuesto</label>
                                     <input type="text" class="form-control" id="taxName" placeholder="Ingresa el nombre del impuesto" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="taxType" class="form-label">Tipo de Impuesto</label>
-                                    <select class="form-select" id="taxType" required onchange="toggleTaxFields()">
+                                    <select class="form-select" id="taxType">
                                         <option value="">Selecciona un tipo</option>
-                                        <option value="porcentual">Porcentual</option>
-                                        <option value="nominal">Nominal</option>
+                                        <option value="porcentual">PORCENTUAL</option>
+                                        <option value="nominal">NOMINAL</option>
                                     </select>
                                 </div>
                                 <!-- Campos dinámicos -->
@@ -204,7 +204,7 @@
 
                             
                             <div class="d-flex justify-content-center align-items-center mt-5">
-                             <button type="button"  class="btn btn-danger ">Eliminar</button>
+                             <button type="button"  class="btn btn-danger " id="btnDelete" >Eliminar</button>
                             </div>
 
                         </div>

@@ -49,6 +49,76 @@ const measureUnitOptions = [
     { label: "M-metros", value: "M-metros" }
 ];
 
+
+//Agregar un nuevo impuesto
+$(document).ready(function () {
+    const modal = $("#addTaxes"); 
+  
+    modal.find("#taxes-btn-save").on("click", function (e) {
+      
+        e.preventDefault(); 
+
+        // Capturar los datos del formulario
+        const taxName = modal.find("#taxName").val().trim(); // Nombre del impuesto
+        const taxType = modal.find("#taxType").val(); // Tipo de impuesto (Porcentual o Nominal)
+        const taxId = 0;
+
+        const taxData = {
+            id: taxId, // Enviamos el id relacionado con el tipo de impuesto
+            name: taxName,
+            typeTaxe: taxType
+        };
+       
+        console.log("Datos que se enviarán al servidor:", taxData);
+        // Validar los campos
+        if (!taxName) {
+            Swal.fire({
+                icon: "warning",
+                title: "¡Falta información!",
+                text: "Por favor, ingresa el nombre del impuesto.",
+                confirmButtonText: "Entendido",
+            });
+            return;
+        }
+        if (!taxType) {
+            Swal.fire({
+                icon: "warning",
+                title: "¡Falta información!",
+                text: "Por favor, selecciona un tipo de impuesto.",
+                confirmButtonText: "Entendido",
+            });
+            return;
+        }
+
+  
+        // Enviar los datos con AJAX
+        $.ajax({
+            url: "http://3.17.151.214/impuestos", 
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(taxData),
+            success: function (response) {
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Enviado!",
+                    text: `Impuesto enviado exitosamente: ${response.message}`,
+                    confirmButtonText: "Cerrar",
+                });
+                
+                modal.modal("hide"); // Ocultar el modal tras el envío
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error al enviar",
+                    text: `No se pudo enviar el impuesto. Detalle: ${xhr.responseText || error}`,
+                    confirmButtonText: "Cerrar",
+                });
+            },
+        });
+    });
+});
+
 // Función para agregar una nueva fila
 const addRow = () => {
     const row = document.createElement("tr");
@@ -388,7 +458,7 @@ const nominalContainer = document.getElementById("table-taxes-2");
 const porcentualContainer = document.getElementById("table-taxes-1");
 
 // Mostrar Nominal
-btnNominal.addEventListener("click", () => {
+/* btnNominal.addEventListener("click", () => {
     nominalContainer.style.display = "block"; 
     porcentualContainer.style.display = "none"; 
 
@@ -396,56 +466,75 @@ btnNominal.addEventListener("click", () => {
     btnNominal.classList.remove("btn-outline-dark");
     btnPorcentual.classList.add("btn-outline-dark");
     btnPorcentual.classList.remove("btn-dark");
-});
+});*/
 
 // Mostrar Porcentual
 btnPorcentual.addEventListener("click", () => {
     porcentualContainer.style.display = "block"; 
     nominalContainer.style.display = "none"; 
-
+  
+/*
     btnPorcentual.classList.add("btn-dark");
     btnPorcentual.classList.remove("btn-outline-dark");
     btnNominal.classList.add("btn-outline-dark");
-    btnNominal.classList.remove("btn-dark");
+    btnNominal.classList.remove("btn-dark"); */
+});
+
+
+let tableTaxesP;  // declaracion de la tabla 
+
+
+btnPorcentual.addEventListener("click", () => {
+    porcentualContainer.style.display = "block"; 
+    nominalContainer.style.display = "none"; 
+
+
+    if (tableTaxesP) {
+        tableTaxesP.destroy(); 
+    }
+
+    buildPorcentualTable();
 });
 
 
 // Construir tabla consulta de impuestos Porcentuales
-var tableTaxesP = new Tabulator("#table-taxes-1", {
-   ajaxURL: "assets/data/taxes.json",
-ajaxConfig: "GET",
-    layout: "fitColumns",
-    responsiveLayout: "collapse",
-    tableClass: "table table-striped table-bordered table-hover",
-    initialLocale: "es-419",
-    langs: {
-        "es-419": {
-            data: {
-                loading: "Cargando datos...",
-                error: "Error al cargar datos.",
+function buildPorcentualTable() {
+        tableTaxesP = new Tabulator("#table-taxes-1", {
+        ajaxURL: "http://3.17.151.214/impuestos",  
+        ajaxConfig: "GET",
+        layout: "fitColumns",
+        responsiveLayout: "collapse",
+        tableClass: "table table-striped table-bordered table-hover",
+        initialLocale: "es-419",
+        langs: {
+            "es-419": {
+                data: {
+                    loading: "Cargando datos...",
+                    error: "Error al cargar datos.",
+                },
             },
         },
-    },
-    columns: [
-        { title: "#", field: "id", width: 80, hozAlign: "center", headerSort: false, headerFilter: true },
-        { title: "Código", field: "code", headerFilter: true, widthGrow: 1 },
-        { title: "Nombre", field: "name", headerFilter: true, widthGrow: 2 },
-        { title: "Descripción", field: "description", widthGrow: 3.5 },
-        { 
-            title: "Tasa de Impuesto", 
-            field: "rate", 
-            formatter: (cell) => {
-                const value = cell.getValue();
-                return `${(value * 100).toFixed(2)}%`; 
-                                // Convierte el decimal a porcentaje con 2 decimales
-            }, 
-            hozAlign: "right", // Alinear a la derecha
-            widthGrow: 1.2 
+        ajaxResponse: function(url, params, response) {
+            // Verifica la estructura de la respuesta del servidor
+            console.log("Respuesta del servidor:", response);
+
+            if (response && response.data && Array.isArray(response.data)) {
+                return response.data; // Pasamos solo el array de datos a Tabulator
+            } else {
+                console.error("La respuesta del servidor no tiene un formato adecuado.");
+                return []; // Devuelve un array vacío en caso de error
+            }
         },
-      ]
-});
+        columns: [
+            { title: "#", field: "id", width: 80, hozAlign: "center", headerSort: false, headerFilter: true },
+            { title: "Nombre", field: "name", headerFilter: true, widthGrow: 2 },
+            { title: "Tipo", field: "typeTaxe", widthGrow: 3.5 }
+        ]
+    });
+}
 
 // Construir tabla consulta de impuestos Nominales
+/*
 var tableTaxesN = new Tabulator("#table-taxes-2", {
     ajaxURL: "assets/data/taxesN.json",
  ajaxConfig: "GET",
@@ -481,13 +570,15 @@ var tableTaxesN = new Tabulator("#table-taxes-2", {
         }
        ]
  });
- 
+ */
 //Mostrar-Ocultar Botones de Impuestos
 const btnSearch = document.getElementById("pills-search-tab");
 const btnCreate= document.getElementById("pills-create-tab");
 const btnDelete=document.getElementById("pills-delete-tab");
 const btnSaveOfTaxes=document.getElementById("taxes-btn-cancel");
 const btnCancelOfTaxes=document.getElementById("taxes-btn-save");
+//Divs
+const tableTaxes= document.getElementById("table-taxes-1");
 
 btnSaveOfTaxes.style.display = "block"; 
 btnCancelOfTaxes.style.display = "none"; 
@@ -495,50 +586,117 @@ btnCancelOfTaxes.style.display = "none";
 btnSearch.addEventListener("click", () => {
     btnSaveOfTaxes.style.display = "block"; 
     btnCancelOfTaxes.style.display = "none"; 
+    tableTaxes.style.display="none";
 });
 btnCreate.addEventListener("click", () => {
     btnSaveOfTaxes.style.display = "block"; 
-    btnCancelOfTaxes.style.display = "block"; 
+    btnCancelOfTaxes.style.display = "block";
+    tableTaxes.style.display="none"; 
+  
 });
 btnDelete.addEventListener("click", () => {
     btnSaveOfTaxes.style.display = "none"; 
     btnCancelOfTaxes.style.display = "none"; 
+    tableTaxes.style.display="none";
+    
+   
 });
 
-//Muestra Los impuestos existentes para ELiminar
+//Eliminar un impuesto seleccionado
+$(document).ready(function(){
 
-function fillTaxSelect(taxesData1, taxesData2) {
+    function deleteTax(taxId){
+
+        $.ajax({
+            url: `http://3.17.151.214/impuestos/${taxId}`, // URL de la BD + ID del impuesto
+            type: 'DELETE',
+            success: function (response) {
+                // Si la eliminación es exitosa, mostramos un mensaje y actualizamos el select
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Eliminado!',
+                    text: 'El impuesto ha sido eliminado exitosamente.',
+                    confirmButtonText: 'Cerrar'
+                });
+
+                // Actualizamos el select después de eliminar el impuesto
+                loadTaxesData();  // Vuelve a cargar los impuestos para reflejar el cambio
+
+            }, error: function (xhr, status, error) {
+                // Si hubo un error en la solicitud
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `No se pudo eliminar el impuesto. Error: ${xhr.responseText}`,
+                    confirmButtonText: 'Cerrar'
+                
+                });
+            }
+        });
+    }
+
+//Muestra Los impuestos existentes para ELiminar
+function fillTaxSelect(taxesData) {
     const taxSelect = document.getElementById('taxSelect');
 
+    // Limpiar el select antes de llenarlo
     taxSelect.innerHTML = '<option value="">Selecciona un impuesto</option>';
   
-    const combinedData = [...taxesData1, ...taxesData2];
-    combinedData.forEach(tax => {
+    // Recorrer los impuestos y agregar las opciones al select
+    taxesData.forEach(tax => {
         const option = document.createElement('option');
         option.value = tax.id;  // Usamos el ID del impuesto como valor
         option.textContent = tax.name;  // Mostramos el nombre del impuesto
         taxSelect.appendChild(option);
     });
 }
-  function loadTaxesData() {
 
-    fetch('assets/data/taxes.json') // Ruta de la BD
+function loadTaxesData() {
+    fetch("http://3.17.151.214/impuestos") // Ruta de la BD
     .then(response => response.json())
-    .then(data1 => {
-        
-        fetch('assets/data/taxesN.json') // Ruta de la 2 BD
-        .then(response => response.json())
-        .then(data2 => {
-            fillTaxSelect(data1, data2); // Llamamos a la función con ambas bases de datos
-        })
-        .catch(error => console.error('Error al cargar la segunda base de datos:', error));
+    .then(data => {
+        fillTaxSelect(data.data); // acceder al array de impuestos
     })
-    .catch(error => console.error('Error al cargar la primera base de datos:', error));
+    .catch(error => console.error('Error al cargar la base de datos:', error));
 }
-document.addEventListener('DOMContentLoaded', loadTaxesData);
 
-// Hacer algo con el impuesto 
+$('#btnModalTaxe').click( function () {
+    // Llamar a la función que carga los datos de los impuestos
+    loadTaxesData();
+});
+//document.addEventListener("DOMContentLoaded",loadTaxesData());
 
+//Boton Eliminar
+$('#btnDelete').click(function () {
+    const selectedTaxId = $('#taxSelect').val();  // Obtener el ID del impuesto seleccionado
+
+    if (!selectedTaxId) {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Selecciona un impuesto!',
+            text: 'Por favor, selecciona un impuesto para eliminar.',
+            confirmButtonText: 'Cerrar'
+        });
+        return;
+    }
+
+    // Confirmación antes de eliminar
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Este impuesto será eliminado permanentemente.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'No, cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Llamar a la función para eliminar el impuesto seleccionado
+            deleteTax(selectedTaxId);
+        }
+    });
+});
+
+});
 
 
 function deleteItem(itemId, row) {
@@ -560,9 +718,6 @@ function deleteItem(itemId, row) {
                 method: "DELETE",
                 success: (response) => {
                     if (response.success) {
-                        // Elimina la fila de la tabla
-                        row.delete();
-
                         // Muestra un mensaje de éxito
                         Swal.fire({
                             title: "¡Eliminado!",
