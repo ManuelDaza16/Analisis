@@ -54,7 +54,7 @@ $(document).ready(function() {
     });
 });
 
-//Agregar un nuevo impuesto
+/*
 $(document).ready(function () {
     const modal = $("#addTaxes"); 
   
@@ -122,6 +122,7 @@ $(document).ready(function () {
         });
     });
 });
+*/
 
 //Funcion para actualizar el total de impuestos
 $(document).ready(function () {
@@ -736,7 +737,78 @@ const porcentualContainer = document.getElementById("table-taxes-1");
     btnPorcentual.classList.remove("btn-dark");
 });*/
 
-// Mostrar Porcentual
+
+// Mostrar Porcentual -----------COPIAR DE AQUI-------------------------------------------------------------------
+
+//Agregar un nuevo impuesto
+$(document).ready(function () {
+    const modal = $("#addTaxes"); 
+  
+    modal.find("#taxes-btn-save").on("click", function (e) {
+      
+        e.preventDefault(); 
+
+        // Capturar los datos del formulario
+        const taxName = modal.find("#taxName").val().trim(); // Nombre del impuesto
+        const taxType = modal.find("#taxType").val(); // Tipo de impuesto (Porcentual o Nominal)
+        const taxId = 0;
+
+        const taxData = {
+            id: taxId, // Enviamos el id relacionado con el tipo de impuesto
+            name: taxName,
+            typeTaxe: taxType
+        };
+       
+        console.log("Datos que se enviarán al servidor:", taxData);
+        // Validar los campos
+        if (!taxName) {
+            Swal.fire({
+                icon: "warning",
+                title: "¡Falta información!",
+                text: "Por favor, ingresa el nombre del impuesto.",
+                confirmButtonText: "Entendido",
+            });
+            return;
+        }
+        if (!taxType) {
+            Swal.fire({
+                icon: "warning",
+                title: "¡Falta información!",
+                text: "Por favor, selecciona un tipo de impuesto.",
+                confirmButtonText: "Entendido",
+            });
+            return;
+        }
+
+  
+        // Enviar los datos con AJAX
+        $.ajax({
+            url: "http://3.17.151.214/impuestos", 
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(taxData),
+            success: function (response) {
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Enviado!",
+                    text: `Impuesto enviado exitosamente: ${response.message}`,
+                    confirmButtonText: "Cerrar",
+                });
+                
+                modal.modal("hide"); // Ocultar el modal tras el envío
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error al enviar",
+                    text: `No se pudo enviar el impuesto. Detalle: ${xhr.responseText || error}`,
+                    confirmButtonText: "Cerrar",
+                });
+            },
+        });
+    });
+});
+
 btnPorcentual.addEventListener("click", () => {
     porcentualContainer.style.display = "block"; 
     nominalContainer.style.display = "none"; 
@@ -748,19 +820,14 @@ btnPorcentual.addEventListener("click", () => {
     btnNominal.classList.remove("btn-dark"); */
 });
 
-
 let tableTaxesP;  // declaracion de la tabla 
-
-
+//Construir tabla de consulta
 btnPorcentual.addEventListener("click", () => {
     porcentualContainer.style.display = "block"; 
     nominalContainer.style.display = "none"; 
-
-
     if (tableTaxesP) {
         tableTaxesP.destroy(); 
     }
-
     buildPorcentualTable();
 });
 
@@ -839,7 +906,8 @@ var tableTaxesN = new Tabulator("#table-taxes-2", {
        ]
  });
  */
-//Mostrar-Ocultar Botones de Impuestos
+
+ //Mostrar-Ocultar Botones de Impuestos
 const btnSearch = document.getElementById("pills-search-tab");
 const btnCreate= document.getElementById("pills-create-tab");
 const btnDelete=document.getElementById("pills-delete-tab");
@@ -867,7 +935,6 @@ btnDelete.addEventListener("click", () => {
     btnCancelOfTaxes.style.display = "none"; 
     tableTaxes.style.display="none";
     
-   
 });
 
 //Eliminar un impuesto seleccionado
@@ -966,7 +1033,6 @@ $('#btnDelete').click(function () {
 
 });
 
-
 function deleteItem(itemId, row) {
     // Muestra una confirmación antes de eliminar
     Swal.fire({
@@ -1020,6 +1086,8 @@ function deleteItem(itemId, row) {
         }
     });
 }
+
+//---------------------------------------------------------------------------------------------------------------------------------
 
 function addRowToCombosTable(filteredItems) {
     const combosTableBody = document.getElementById("combosTableBody");
