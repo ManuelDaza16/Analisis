@@ -1302,3 +1302,7 @@ function toggleTaxFields() {
         itemDescription.style.display = 'none';
     }
 }
+
+$("#taxType").click(function(){
+    toggleTaxFields() 
+})
